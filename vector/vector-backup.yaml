@@ -161,7 +161,7 @@ sinks:
   loki_sink:
     type: "loki"
     healthcheck: true
-    endpoint: "http://10.59.158.53:3100"
+    endpoint: "http://{some_ip}:3100"
     compression: "gzip"
     request:
       rate_limit_num: 30
