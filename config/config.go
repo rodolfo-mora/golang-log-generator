@@ -44,7 +44,7 @@ func newDefaultConfig() Config {
 			User:       "admin",
 			Password:   "admin",
 			Filepath:   []string{"/var/log/nginx/loki_testing_access.log"},
-			Indexes:    []string{"kidred-test-index"},
+			Indexes:    []string{"test-index"},
 			LoggerType: "file",
 		},
 		WorkerConfig: newWorkerConfig(),
