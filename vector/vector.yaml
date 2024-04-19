@@ -1,0 +1,69 @@
+api:
+  enabled: false
+sources:
+  elbs:
+    type: "file"
+    include: 
+      - "/var/log/nginx/*access.log"
+transforms:
+  parsing:
+    type: remap
+    inputs:
+      - elbs
+    source: |-
+      . = parse_grok!(.message,"%{DATESTAMP:timestamp} %{GREEDYDATA:message}")
+      # .parsed = parse_regex!(.message, r'(?P<year>\d{4})/(?P<month>d{2})/(?P<day>\d{2}):(?P<hour>\d{2}:\d{2}:\d{2}) (?P<message>.*)$')
+      ., err = parse_key_value(.message)
+      .counter = 1
+      del(.message)
+
+  sampling:
+    type: reduce
+    inputs:
+      - parsing
+    merge_strategies:
+      .counter: sum
+    expire_after_ms: 10
+    flush_period_ms: 1000
+    max_events: 1000
+    group_by:
+      - .is_block
+      - .server_name
+      - .md5_semi_ja3_headers
+      - .remote_addr
+      - .uri
+
+sinks:
+  loki:
+    type: "loki"
+    tenant_id: "fake"
+    healthcheck: true
+    endpoint: "http://loki.test.test-node.net:3100"
+    compression: "none"
+    batch:
+      type: memory
+      max_bytes: 10000
+      timeout_secs: 2
+    buffer:
+      max_events: 100000
+    out_of_order_action: accept
+    labels:
+      "souce": "log-generator-local-test"
+      "environment": "development"
+      "team": "sre"
+      "loglevel": "debug"
+      "sourcetype": "nginx_access"
+      "status": "STATUS"
+
+    inputs:
+      - "sampling"
+    encoding:
+      codec: "json"
+
+  console:
+    type: console
+    target: stdout
+    inputs: 
+      - parsing
+    encoding:
+      codec: json

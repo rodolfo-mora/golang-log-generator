@@ -1,0 +1,193 @@
+api:
+  enabled: false
+sources:
+  elbs:
+    type: "file"
+    include: 
+      - "/var/log/nginx/*access.log"
+
+transforms:
+  parsing:
+    type: remap
+    inputs:
+      - elbs
+    source: |-
+      # . = parse_grok!(.message,"%{HTTPDATE:timestamp}] %{GREEDYDATA:message}")
+      .access_log_fields, err = parse_key_value(.message)
+      del(.message)
+      if is_nullish(.access_log_fields.bytes_sent) == true {
+        .access_log_fields.bytes_sent = "0"
+      }
+      if is_nullish(.access_log_fields.cipher) == true {
+        .access_log_fields.cipher = "NaN"
+      }
+      if is_nullish(.access_log_fields.conn) == true {
+        .access_log_fields.conn = "0"
+      }
+      if is_nullish(.access_log_fields.conn_req) == true {
+        .access_log_fields.conn_req = "0"
+      }
+      if is_nullish(.access_log_fields.http_accept) == true {
+        .access_log_fields.http_accept = "NaN"
+      }
+      if is_nullish(.access_log_fields.http_accept_encoding) == true {
+        .access_log_fields.http_accept_encoding = "NaN"
+      }
+      if is_nullish(.access_log_fields.http_accept_language) == true {
+        .access_log_fields.http_accept_language = "NaN"
+      }
+      if is_nullish(.access_log_fields.http_host) == true {
+        .access_log_fields.http_host = "NaN"
+      }
+      if is_nullish(.access_log_fields.http_referer) == true {
+        .access_log_fields.http_referer = "NaN"
+      }
+      if is_nullish(.access_log_fields.http_user_agent) == true {
+        .access_log_fields.http_user_agent = "NaN"
+      }
+      if is_nullish(.access_log_fields.http_x_forwarded_for) == true {
+        .access_log_fields.http_x_forwarded_for = "0"
+      }
+      if is_nullish(.access_log_fields.http_x_request_id) == true {
+          .access_log_fields.http_x_request_id = "NaN"
+      }
+      if is_nullish(.access_log_fields.http_x_request_id) == true {
+          .access_log_fields.http_x_request_id = "NaN"
+      }
+      if is_nullish(.access_log_fields.internal) == true {
+          .access_log_fields.internal = "NaN"
+      }
+      if is_nullish(.access_log_fields.is_block) == true {
+          .access_log_fields.is_block = "NaN"
+      }
+      if is_nullish(.access_log_fields.limit_req_status) == true {
+          .access_log_fields.limit_req_status = "NaN"
+      }
+      if is_nullish(.access_log_fields.md5_semi_ja3) == true {
+          .access_log_fields.md5_semi_ja3 = "NaN"
+      }
+      if is_nullish(.access_log_fields.md5_semi_ja3_headers) == true {
+          .access_log_fields.md5_semi_ja3_headers = "NaN"
+      }
+      if is_nullish(.access_log_fields.njc) == true {
+          .access_log_fields.njc = "NaN"
+      }
+      if is_nullish(.access_log_fields.pid) == true {
+          .access_log_fields.pid = "0"
+      }
+      if is_nullish(.access_log_fields.r_c) == true {
+          .access_log_fields.r_c = "NaN"
+      }
+      if is_nullish(.access_log_fields.remote_addr) == true {
+          .access_log_fields.remote_addr = "0"
+      }
+      if is_nullish(.access_log_fields.remote_port) == true {
+          .access_log_fields.remote_port = "0"
+      }
+      if is_nullish(.access_log_fields.remote_user) == true {
+          .access_log_fields.remote_user = "NaN"
+      }
+      if is_nullish(.access_log_fields.request) == true {
+          .access_log_fields.request = "NaN"
+      }
+      if is_nullish(.access_log_fields.request_length) == true {
+          .access_log_fields.request_length = "0"
+      }
+      if is_nullish(.access_log_fields.request_time) == true {
+          .access_log_fields.request_time = "0"
+      }
+      if is_nullish(.access_log_fields.rtt) == true {
+          .access_log_fields.rtt = "0"
+      }
+      if is_nullish(.access_log_fields.server_addr) == true {
+          .access_log_fields.server_addr = "NaN"
+      }
+      if is_nullish(.access_log_fields.server_name) == true {
+          .access_log_fields.server_name = "NaN"
+      }
+      if is_nullish(.access_log_fields.server_port) == true {
+          .access_log_fields.server_port = "NaN"
+      }
+      if is_nullish(.access_log_fields.ssl_curves) == true {
+          .access_log_fields.ssl_curves = "NaN"
+      }
+      if is_nullish(.access_log_fields.ssl_protocol) == true {
+          .access_log_fields.ssl_protocol = "NaN"
+      }
+      if is_nullish(.access_log_fields.ssl_s_n) == true {
+          .access_log_fields.ssl_s_n = "NaN"
+      }
+      if is_nullish(.access_log_fields.ssl_session_reused) == true {
+          .access_log_fields.ssl_session_reused = "NaN"
+      }
+      if is_nullish(.access_log_fields.status) == true {
+          .access_log_fields.status = "NaN"
+      }
+      if is_nullish(.access_log_fields.tmp_ddos_rl) == true {
+          .access_log_fields.tmp_ddos_rl = "NaN"
+      }
+      if is_nullish(.access_log_fields.upstream_addr) == true {
+          .access_log_fields.upstream_addr = "127.0.0.1"
+      }
+      if is_nullish(.access_log_fields.upstream_cache_status) == true {
+          .access_log_fields.upstream_cache_status = "DISABLED"
+      }
+      if is_nullish(.access_log_fields.upstream_connect_time) == true {
+          .access_log_fields.upstream_connect_time = "0"
+      }
+      if is_nullish(.access_log_fields.upstream_header_time) == true {
+          .access_log_fields.upstream_header_time = "0"
+      }
+      if is_nullish(.access_log_fields.upstream_http_cache_control) == true {
+          .access_log_fields.upstream_http_cache_control = "NaN"
+      }
+      if is_nullish(.access_log_fields.upstream_http_content_type) == true {
+          .access_log_fields.upstream_http_content_type = "NaN"
+      }
+      if is_nullish(.access_log_fields.upstream_name) == true {
+          .access_log_fields.upstream_name = "NaN"
+      }
+      if is_nullish(.access_log_fields.upstream_response_time) == true {
+          .access_log_fields.upstream_response_time = "0"
+      }
+      if is_nullish(.access_log_fields.upstream_status) == true {
+          .access_log_fields.upstream_status = "0"
+      }
+      if is_nullish(.access_log_fields.uri) == true {
+          .access_log_fields.uri = "NaN"
+      }
+
+sinks:
+  loki_sink:
+    type: "loki"
+    healthcheck: true
+    endpoint: "http://10.59.158.53:3100"
+    compression: "gzip"
+    request:
+      rate_limit_num: 30
+    batch:
+      max_bytes: 2000000
+    out_of_order_action: drop
+    labels:
+      forwarder: "loki_elb_test"
+      files: "{{ file }}"
+      host: "{{ host }}"
+      sourcetype: "nginx_access"
+      server_addr: "{{ .access_log_fields.server_addr }}"
+      http_host: "{{ .access_log_fields.http_host }}"
+      md5_semi_ja3_headers: "{{ .access_log_fields.md5_semi_ja3_headers }}"
+      md5_semi_ja3: "{{ .access_log_fields.md5_semi_ja3 }}"
+      status_code: "{{ .access_log_fields.status }}"
+      #message: "{{ .access_log_fields }}"
+    inputs:
+      - "parsing"
+    encoding:
+      codec: "json"
+
+  # console:
+  #   type: console
+  #   target: stdout
+  #   inputs: 
+  #     - parsing
+  #   encoding:
+  #     codec: json

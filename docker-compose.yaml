@@ -1,0 +1,14 @@
+version: '3'
+services:
+  log-generator:
+    image: log-generator:0.0.5
+    # container_name: log-generator
+    environment:
+      - WORKERS=1
+      - INTERVAL=1000
+    network_mode: host
+    volumes:
+    - ./vector:/etc/vector/
+    - ./logs:/var/log/nginx/
+    deploy:
+      replicas: 1
